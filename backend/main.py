@@ -2,10 +2,10 @@ from telemetry.telemetry import read_telemetry
 from state.store import update, snapshot
 from launchsite.client import fetch_rocket
 from contextlib import asynccontextmanager
+from api.web_socket import wsrouter
 import asyncio
 from fastapi  import FastAPI
 BASE_URL='http://localhost:5000'
-
 async def watch(host, port):
     async for t in read_telemetry(host, port):
         update(t)
@@ -23,3 +23,7 @@ async def lifespan(app: FastAPI):
     for watcher in watchers:
         watcher.cancel()
 app = FastAPI(lifespan=lifespan)        
+app.include_router(wsrouter)
+@app.get("/")
+async def root():
+    return {"m:m"}

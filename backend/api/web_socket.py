@@ -1,7 +1,14 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from telemetry.telemetry import read_telemetry
-router = APIRouter()
-@router.WebSocket("/ws")
-async def telemetry(WebSocket: WebSocket):
+from state.store import snapshot
+import asyncio
+wsrouter = APIRouter()
+@wsrouter.websocket("/ws")
+async def telemetry(websocket: WebSocket):
     await websocket.accept()
-    while True:
+    try:
+        while True:
+            await websocket.send_json(snapshot())
+            await asyncio.sleep(0.2)
+    except WebSocketDisconnect:
+        pass
+        
