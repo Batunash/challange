@@ -69,9 +69,9 @@ async def cancel_launch(Baseurl,rocket_id):
     
 async def main():
     #while True:
-    #   print(await fetch_rocket(BASE_URL))
+    #    print(await fetch_rocket(BASE_URL))
     #    print(await fetch_weather(BASE_URL))
     #    print(await launch_rocket(BASE_URL,'9bAWNaUUHz'))
     #    print(await deploy_rocket(BASE_URL,'9bAWNaUUHz')) #cant canel after a deploy
-    #   print(await cancel_launch(BASE_URL,'9bAWNaUUHz'))
+    #    print(await cancel_launch(BASE_URL,'9bAWNaUUHz'))
 asyncio.run(main())

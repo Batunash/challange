@@ -1,2 +1,3 @@
 httpx
 httpx_retries
+fastapi
