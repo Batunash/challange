@@ -1,7 +1,6 @@
 import httpx
 from httpx_retries import RetryTransport, Retry
 import asyncio
-BASE_URL='http://localhost:5000'
 async def fetch_rocket(Baseurl):
     url = Baseurl + '/rockets'
     headers= {"X-API-Key": "API_KEY_1"}

@@ -3,6 +3,7 @@ from state.store import update, snapshot
 from launchsite.client import fetch_rocket
 from contextlib import asynccontextmanager
 from api.web_socket import wsrouter
+from api.launchsite_api import launchrouter
 import asyncio
 from fastapi  import FastAPI
 BASE_URL='http://localhost:5000'
@@ -24,6 +25,7 @@ async def lifespan(app: FastAPI):
         watcher.cancel()
 app = FastAPI(lifespan=lifespan)        
 app.include_router(wsrouter)
+app.include_router(launchrouter)
 @app.get("/")
 async def root():
     return {"m:m"}
