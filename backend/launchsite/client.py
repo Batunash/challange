@@ -12,7 +12,8 @@ async def fetch_rocket(Baseurl):
         try:
             r.raise_for_status()
         except httpx.HTTPStatusError as exc:
-            print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")            
+            print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")   
+            return None         
         return r.json()
 async def fetch_weather(Baseurl):
     url = Baseurl + '/weather'
@@ -67,11 +68,11 @@ async def cancel_launch(Baseurl,rocket_id):
             return None           
         return r.json()
     
-async def main():
+#async def main():
     #while True:
     #    print(await fetch_rocket(BASE_URL))
     #    print(await fetch_weather(BASE_URL))
     #    print(await launch_rocket(BASE_URL,'9bAWNaUUHz'))
     #    print(await deploy_rocket(BASE_URL,'9bAWNaUUHz')) #cant canel after a deploy
     #    print(await cancel_launch(BASE_URL,'9bAWNaUUHz'))
-asyncio.run(main())
+#asyncio.run(main())
