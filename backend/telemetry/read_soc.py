@@ -1,12 +1,13 @@
-import socket
+import asyncio
 from .crc16 import crc16_buypass
 
-def read_soc(HOST,PORT):
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.connect((HOST, PORT))
+async def read_soc(HOST,PORT):
+        reader, writer = await asyncio.open_connection(HOST, PORT)
+        try:
             buffer=bytearray()
             while True:
-                chunk = s.recv(1024)
+                chunk = await reader.read(1024)
+
                 if not chunk:
                     break
                 buffer.extend(chunk)
@@ -16,3 +17,6 @@ def read_soc(HOST,PORT):
                         del buffer[:36]
                     else:
                         buffer.pop(0)
+        finally:
+            writer.close()
+            await writer.wait_closed()
