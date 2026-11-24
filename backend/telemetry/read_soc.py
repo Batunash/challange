@@ -1,5 +1,5 @@
 import socket
-from crc16 import crc16_buypass
+from .crc16 import crc16_buypass
 
 def read_soc(HOST,PORT):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
