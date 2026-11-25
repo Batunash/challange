@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import api from "../hooks/api";
 
-export function RocketCard({ telemetry }) {
+export function RocketCard({ telemetry, data, onActionSuccess }) {
+  const [isUpdating, setIsUpdating] = useState(false);
+
   if (!telemetry) return null;
 
   const {
@@ -15,47 +18,96 @@ export function RocketCard({ telemetry }) {
     connected,
   } = telemetry;
 
+  // Birim dönüşümleri
+  const altitudeKm = altitude != null ? (altitude / 1000).toFixed(2) : "-";
+  const speedKmh = speed != null ? (speed * 3.6).toFixed(1) : "-";
+
+  async function handleLaunch() {
+    setIsUpdating(true);
+    try {
+      await api.put(`/rocket/${rocket_id}/status/launched`);
+      await onActionSuccess?.();
+    } catch (err) {
+      console.error("Launch error:", err);
+    } finally {
+      setIsUpdating(false);
+    }
+  }
+
+  async function handleCancelLaunch() {
+    setIsUpdating(true);
+    try {
+      await api.delete(`/rocket/${rocket_id}/status/launched`);
+      await onActionSuccess?.();
+    } catch (err) {
+      console.error("Cancel launch error:", err);
+    } finally {
+      setIsUpdating(false);
+    }
+  }
+
+  async function handleDeploy() {
+    setIsUpdating(true);
+    try {
+      await api.put(`/rocket/${rocket_id}/status/deployed`);
+      await onActionSuccess?.();
+    } catch (err) {
+      console.error("Deploy error:", err);
+    } finally {
+      setIsUpdating(false);
+    }
+  }
+
   return (
-    <div>
-      <div>
-        <h3>{rocket_id}</h3>
-        <span
-          style={{
-            backgroundColor: connected ? "#dcfce7" : "#fee2e2",
-            color: connected ? "#166534" : "#991b1b",
-          }}
-        >
-          {connected ? "connected" : "disconnected"}
-        </span>
+    <div style={{ border: "1px solid #ccc", padding: "12px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px" }}>
+        <strong>{data?.model || rocket_id}</strong>
+        <span>{connected ? "connected" : "disconnected"}</span>
       </div>
-      <div>
-        <div>
-          <span>Altitude: </span>
-          <span>{altitude} m</span>
+
+      <div style={{ display: "flex", gap: "16px" }}>
+        <div style={{ flex: 1 }}>
+          <h4>General Information</h4>
+          <div>Id: {rocket_id}</div>
+          <div>Status: {data?.status || "-"}</div>
+          <div>Mass: {data?.mass} kg</div>
+          <div>Payload: {data?.payload?.description || "-"}</div>
+          <div>Payload Mass: {data?.payload?.weight} kg</div>
+          <div>Launched: {data?.timestamps?.launched || "-"}</div>
+          <div>Deployed: {data?.timestamps?.deployed || "-"}</div>
+          <div>Failed: {data?.timestamps?.failed || "-"}</div>
+          <div>Cancelled: {data?.timestamps?.cancelled || "-"}</div>
         </div>
-        <div>
-          <span>Speed: </span>
-          <span>{speed} m/s</span>
+
+        <div style={{ flex: 1 }}>
+          <h4>Telemetry</h4>
+          <div>Altitude: {altitudeKm} km</div>
+          <div>Speed: {speedKmh} km/h</div>
+          <div>Accel: {acceleration} m/s²</div>
+          <div>Thrust: {thrust?.toLocaleString("tr-TR")} N</div>
+          <div>Temp: {temperature} °C</div>
+          <div>Pack: #{pack_no}</div>
+          <div>Last: {(seconds_since_last_packet * 1000).toFixed(1)} ms</div>
         </div>
-        <div>
-          <span>Accel: </span>
-          <span>{acceleration} m/s²</span>
+
+        <div style={{ flex: 1 }}>
+          <h4>Actions</h4>
+          <div>
+            <button disabled={isUpdating} onClick={handleLaunch}>
+              launch
+            </button>
+          </div>
+          <div>
+            <button disabled={isUpdating} onClick={handleDeploy}>
+              deploy
+            </button>
+          </div>
+          <div>
+            <button disabled={isUpdating} onClick={handleCancelLaunch}>
+              cancel launch
+            </button>
+          </div>
         </div>
-        <div>
-          <span>Thrust: </span>
-          <span>{thrust?.toLocaleString("tr-TR")} N</span>
-        </div>
-        <div>
-          <span>Temperature: </span>
-          <span>{temperature} °C</span>
-        </div>
-        <div>
-          <span>Pack No: </span>
-          <span>#{pack_no}</span>
-        </div>
-      </div>
-      <div>
-        last pack: {(seconds_since_last_packet * 1000).toFixed(1)} ms önce
       </div>
     </div>
   );
