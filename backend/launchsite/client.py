@@ -4,7 +4,7 @@ import asyncio
 from config import API_KEY
 HEADERS = {"X-API-Key": API_KEY}
 RETRY = Retry(total=5)
-TRANSPORT = RetryTransport(retry=Retry)
+TRANSPORT = RetryTransport(retry=RETRY)
 async def fetch_rocket(Baseurl):
     url = Baseurl + '/rockets'
     async with httpx.AsyncClient(transport=TRANSPORT) as client:
