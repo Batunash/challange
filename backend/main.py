@@ -6,7 +6,7 @@ from api.web_socket import wsrouter
 from api.launchsite_api import launchrouter
 import asyncio
 from fastapi  import FastAPI
-BASE_URL='http://localhost:5000'
+from config import BASE_URL
 async def watch(host, port):
     async for t in read_telemetry(host, port):
         update(t)
@@ -28,4 +28,4 @@ app.include_router(wsrouter)
 app.include_router(launchrouter)
 @app.get("/")
 async def root():
-    return {"m:m"}
+    return {"statu:ok"}

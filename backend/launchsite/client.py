@@ -1,13 +1,14 @@
 import httpx
 from httpx_retries import RetryTransport, Retry
 import asyncio
+from config import API_KEY
+HEADERS = {"X-API-Key": API_KEY}
+RETRY = Retry(total=5)
+TRANSPORT = RetryTransport(retry=Retry)
 async def fetch_rocket(Baseurl):
     url = Baseurl + '/rockets'
-    headers= {"X-API-Key": "API_KEY_1"}
-    retry= Retry(total=5)
-    transport=RetryTransport(retry=retry)
-    async with httpx.AsyncClient(transport=transport) as client:
-        r = await client.get(url, headers=headers,timeout=3.0)
+    async with httpx.AsyncClient(transport=TRANSPORT) as client:
+        r = await client.get(url, headers=HEADERS,timeout=3.0)
         try:
             r.raise_for_status()
         except httpx.HTTPStatusError as exc:
@@ -16,11 +17,8 @@ async def fetch_rocket(Baseurl):
         return r.json()
 async def fetch_weather(Baseurl):
     url = Baseurl + '/weather'
-    headers= {"X-API-Key": "API_KEY_1"}
-    retry= Retry(total=5)
-    transport=RetryTransport(retry=retry)
-    async with httpx.AsyncClient(transport=transport) as client:
-        r = await client.get(url, headers=headers,timeout=3.0)
+    async with httpx.AsyncClient(transport=TRANSPORT) as client:
+        r = await client.get(url, headers=HEADERS,timeout=3.0)
         try:
             r.raise_for_status()
         except httpx.HTTPStatusError as exc:
@@ -29,11 +27,8 @@ async def fetch_weather(Baseurl):
         return r.json()
 async def launch_rocket(Baseurl,rocket_id):
     url = Baseurl +"/rocket/"+rocket_id+"/status/launched"
-    headers= {"X-API-Key": "API_KEY_1"}
-    retry= Retry(total=5)
-    transport=RetryTransport(retry=retry)
-    async with httpx.AsyncClient(transport=transport) as client:
-        r = await client.put(url, headers=headers,timeout=3.0)
+    async with httpx.AsyncClient(transport=TRANSPORT) as client:
+        r = await client.put(url, headers=HEADERS,timeout=3.0)
         try:
             r.raise_for_status()
         except httpx.HTTPStatusError as exc:
@@ -42,11 +37,8 @@ async def launch_rocket(Baseurl,rocket_id):
         return r.json()
 async def deploy_rocket(Baseurl,rocket_id):
     url = Baseurl +"/rocket/"+rocket_id+"/status/deployed"
-    headers= {"X-API-Key": "API_KEY_1"}
-    retry= Retry(total=5)
-    transport=RetryTransport(retry=retry)
-    async with httpx.AsyncClient(transport=transport) as client:
-        r = await client.put(url, headers=headers,timeout=3.0)
+    async with httpx.AsyncClient(transport=TRANSPORT) as client:
+        r = await client.put(url, headers=HEADERS,timeout=3.0)
         try:
             r.raise_for_status()
         except httpx.HTTPStatusError as exc:
@@ -55,11 +47,8 @@ async def deploy_rocket(Baseurl,rocket_id):
         return r.json()
 async def cancel_launch(Baseurl,rocket_id):
     url = Baseurl +"/rocket/"+rocket_id+"/status/launched"
-    headers= {"X-API-Key": "API_KEY_1"}
-    retry= Retry(total=5)
-    transport=RetryTransport(retry=retry)
-    async with httpx.AsyncClient(transport=transport) as client:
-        r = await client.delete(url, headers=headers,timeout=3.0)
+    async with httpx.AsyncClient(transport=TRANSPORT) as client:
+        r = await client.delete(url, headers=HEADERS,timeout=3.0)
         try:
             r.raise_for_status()
         except httpx.HTTPStatusError as exc:

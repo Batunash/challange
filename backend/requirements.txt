@@ -1,4 +1,5 @@
 httpx
 httpx_retries
 fastapi
-uvicorn[standart]
+uvicorn[standard]
+python-dotenv
