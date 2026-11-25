@@ -12,8 +12,13 @@ from fastapi.middleware.cors import CORSMiddleware
 import httpx
 from config import BASE_URL
 async def watch(host, port):
-    async for t in read_telemetry(host, port):
-        update(t)
+    while True:
+        try:
+            async for t in read_telemetry(host, port):
+                update(t)
+        except Exception as e:
+            print(e)
+        await asyncio.sleep(1)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     watchers = []
