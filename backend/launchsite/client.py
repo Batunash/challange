@@ -9,51 +9,32 @@ async def fetch_rocket(Baseurl):
     url = Baseurl + '/rockets'
     async with httpx.AsyncClient(transport=TRANSPORT) as client:
         r = await client.get(url, headers=HEADERS,timeout=3.0)
-        try:
-            r.raise_for_status()
-        except httpx.HTTPStatusError as exc:
-            print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")   
-            return None         
+        r.raise_for_status()
         return r.json()
 async def fetch_weather(Baseurl):
     url = Baseurl + '/weather'
     async with httpx.AsyncClient(transport=TRANSPORT) as client:
         r = await client.get(url, headers=HEADERS,timeout=3.0)
-        try:
-            r.raise_for_status()
-        except httpx.HTTPStatusError as exc:
-            print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")    
-            return None                   
+        r.raise_for_status()
         return r.json()
+    
 async def launch_rocket(Baseurl,rocket_id):
     url = Baseurl +"/rocket/"+rocket_id+"/status/launched"
     async with httpx.AsyncClient(transport=TRANSPORT) as client:
         r = await client.put(url, headers=HEADERS,timeout=3.0)
-        try:
-            r.raise_for_status()
-        except httpx.HTTPStatusError as exc:
-            print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.") 
-            return None           
+        r.raise_for_status()
         return r.json()
 async def deploy_rocket(Baseurl,rocket_id):
     url = Baseurl +"/rocket/"+rocket_id+"/status/deployed"
     async with httpx.AsyncClient(transport=TRANSPORT) as client:
         r = await client.put(url, headers=HEADERS,timeout=3.0)
-        try:
-            r.raise_for_status()
-        except httpx.HTTPStatusError as exc:
-            print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")  
-            return None                     
+        r.raise_for_status()
         return r.json()
 async def cancel_launch(Baseurl,rocket_id):
     url = Baseurl +"/rocket/"+rocket_id+"/status/launched"
     async with httpx.AsyncClient(transport=TRANSPORT) as client:
         r = await client.delete(url, headers=HEADERS,timeout=3.0)
-        try:
-            r.raise_for_status()
-        except httpx.HTTPStatusError as exc:
-            print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")            
-            return None           
+        r.raise_for_status()
         return r.json()
     
 #async def main():
