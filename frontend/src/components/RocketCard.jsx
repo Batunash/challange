@@ -18,10 +18,10 @@ export function RocketCard({ telemetry, data, onActionSuccess }) {
     connected,
   } = telemetry;
 
-  // Birim dönüşümleri
   const altitudeKm = altitude != null ? (altitude / 1000).toFixed(2) : "-";
   const speedKmh = speed != null ? (speed * 3.6).toFixed(1) : "-";
-
+  const accelKmhPerSec = acceleration != null ? (acceleration * 3.6).toFixed(1) : "-";
+  const thurstkgn = thrust != null ?(thrust/1000).toFixed(1): "-";
   async function handleLaunch() {
     setIsUpdating(true);
     try {
@@ -83,8 +83,8 @@ export function RocketCard({ telemetry, data, onActionSuccess }) {
           <h4>Telemetry</h4>
           <div>Altitude: {altitudeKm} km</div>
           <div>Speed: {speedKmh} km/h</div>
-          <div>Accel: {acceleration} m/s²</div>
-          <div>Thrust: {thrust?.toLocaleString("tr-TR")} N</div>
+          <div>Accel: {accelKmhPerSec} km/s²</div>
+          <div>Thrust: {thurstkgn?.toLocaleString("tr-TR")} KgN</div>
           <div>Temp: {temperature} °C</div>
           <div>Pack: #{pack_no}</div>
           <div>Last: {(seconds_since_last_packet * 1000).toFixed(1)} ms</div>
