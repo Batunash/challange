@@ -26,15 +26,16 @@ function App() {
   return (
     <>
       <CssBaseline />
-      <div style={{ width: "100%", margin: 0, padding: 0,bgcolor: "#263238"}}>
+      <div style={{ width: "100%", margin: 0, padding: 0,backgroundColor: "#444f53"}}>
         <WeatherBanner />
 
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "16px",
-            padding: "16px",
+            gap: "20px",
+            padding: "20px",
+            bgcolor: "#263238"
           }}
         >
           {rockets.map((rocket) => (

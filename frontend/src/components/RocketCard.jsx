@@ -54,11 +54,7 @@ export function RocketCard({ telemetry, data, onActionSuccess }) {
 
   const currentStatus = localStatus?.toLowerCase();
 
-  useEffect(() => {
-    setLocalStatus(data?.status);
-  }, [data?.status]);
-
-  if (!telemetry) return null;
+  
 
   const {
     rocket_id,
@@ -70,7 +66,7 @@ export function RocketCard({ telemetry, data, onActionSuccess }) {
     temperature,
     seconds_since_last_packet,
     connected,
-  } = telemetry;
+  } = telemetry || {};
 
   const altitudeKm = altitude != null ? (altitude / 1000).toFixed(2) : "-";
   const speedKmh = speed != null ? (speed * 3.6).toFixed(1) : "-";
@@ -162,6 +158,17 @@ export function RocketCard({ telemetry, data, onActionSuccess }) {
       setIsUpdating(false);
     }
   }
+  const altitudeInKmNumeric = altitude != null ? altitude / 1000 : 0;
+  useEffect(() => {
+    if (rocket_id === "FvxKSGLkVC" && connected === false && altitudeInKmNumeric >= 48000) {
+      setLocalStatus("failed");
+    } else {
+      setLocalStatus(data?.status);
+    }
+  }, [data?.status, rocket_id, connected, altitudeInKmNumeric]);
+   if (!telemetry) return null;
+
+
 
   return (
     <>
